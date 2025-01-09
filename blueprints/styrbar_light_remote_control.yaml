@@ -30,13 +30,23 @@ blueprint:
     delay_ms:
       name: Delay (ms) Between Steps
       description: "Delay in milliseconds between brightness adjustment steps."
-      default: 500
+      default: 300
       selector:
         number:
           min: 100
           max: 2000
           step: 100
           unit_of_measurement: "ms"
+    transition_seconds:
+      name: Transition Time (Seconds)
+      description: "The duration in seconds for the light transition effect."
+      default: 1
+      selector:
+        number:
+          min: 0.1
+          max: 9999
+          step: 0.1
+          unit_of_measurement: "s"
 
 trigger:
   - platform: device
@@ -91,6 +101,13 @@ action:
           - service: light.turn_on
             target:
               entity_id: !input light_entity
+            data:
+              brightness: >
+                {% if state_attr('input.light_entity', 'brightness') == 0 %}
+                  10
+                {% else %}
+                  {{ state_attr('light.light_entity', 'brightness') }}
+                {% endif %}
       - conditions:
           - condition: trigger
             id: light_off
@@ -127,6 +144,7 @@ action:
                     entity_id: !input light_entity
                   data:
                     brightness_step_pct: "-{{ states('input.brightness_step') | int(5) }}"
+                    transition: !input transition_seconds
                 - delay:
                     milliseconds: !input delay_ms
               until:
@@ -143,6 +161,7 @@ action:
                     entity_id: !input light_entity
                   data:
                     brightness_step_pct: "{{ states('input.brightness_step') | int(5) }}"
+                    transition: !input transition_seconds
                 - delay:
                     milliseconds: !input delay_ms
               until:
