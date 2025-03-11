@@ -109,7 +109,7 @@ action:
                   target:
                     entity_id: !input light_entity
                   data:
-                    brightness_step_pct: "-{{ states('input.brightness_step') | int(5) }}"
+                    brightness_decrease: 5
                     transition: !input transition_seconds
                 - delay:
                     milliseconds: !input delay_ms
@@ -126,7 +126,7 @@ action:
                   target:
                     entity_id: !input light_entity
                   data:
-                    brightness_step_pct: "{{ states('input.brightness_step') | int(5) }}"
+                    brightness_increase: 5
                     transition: !input transition_seconds
                 - delay:
                     milliseconds: !input delay_ms
