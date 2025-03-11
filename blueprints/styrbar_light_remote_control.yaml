@@ -17,11 +17,6 @@ blueprint:
       description: Dimmer to control.
       selector:
         device: {}
-    dimmer_entity:
-      name: Dimmer Entity
-      description: Dimmer to control.
-      selector:
-        entity: {}
     mqtt_device:
       name: Styrbar Remote Control
       description: The IKEA E2001/E2002 remote control.
@@ -97,7 +92,7 @@ action:
               sequence:
                 - device_id: !input dimmer_device
                   domain: light
-                  entity_id: !input dimmer_entity
+                  entity_id: !input light_entity
                   type: brightness_decrease
                 - delay:
                     milliseconds: !input delay_ms
@@ -112,7 +107,7 @@ action:
               sequence:
                 - device_id: !input dimmer_device
                   domain: light
-                  entity_id: !input dimmer_entity
+                  entity_id: !input light_entity
                   type: brightness_increase
                 - delay:
                     milliseconds: !input delay_ms
